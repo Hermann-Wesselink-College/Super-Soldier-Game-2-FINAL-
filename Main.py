@@ -2,11 +2,7 @@ import pygame
 import sys
 from settings import *
 from player import *
-from hud import *
-from raycasting import *
 from game_map import *
-from enemies import *
-from objects import *
 
 def main():
     pygame.init()
