@@ -14,9 +14,9 @@ class Player:
         self.x += dx
         self.y += dy
 
-keys = pygame.key.get_pressed()
+def update(self, keys):
+        # Move up
         if keys[pygame.K_w]:
-            self.y -= self.speed
-    new_y = self.y - self.speed
-    if not map.is_wall(new_y // map.TILE_SIZE):
-        self.y = new_y
+            new_y = self.y - self.speed
+            if not is_wall(int(self.x // TILE_SIZE), int(new_y // TILE_SIZE)):
+                self.y = new_y
