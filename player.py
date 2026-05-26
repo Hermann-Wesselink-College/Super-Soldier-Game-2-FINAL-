@@ -13,6 +13,7 @@ class Player:
         self.angle = 0.0
         self.carrying = False
         self.speed = 1.0
+        self.size = PLAYER_SIZE
 
     def move(self, dx, dy):
         self.x += dx
@@ -43,5 +44,5 @@ class Player:
         mx, my = pygame.mouse.get_pos()
         self.angle = math.atan2(my -self.y, mx - self.x)
 
-    def draw(self, screen):
-        pygame.draw.circle(screen, GREEN, (int(self.x), int(self.y)), 10)
+    def draw(self, screen, cam_x, cam_y):
+        pygame.draw.circle(screen, GREEN, (int(self.x - cam_x), int(self.y - cam_y)), self.size)
