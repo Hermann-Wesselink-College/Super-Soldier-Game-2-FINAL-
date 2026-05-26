@@ -3,6 +3,7 @@ import sys
 from settings import *
 from player import *
 from game_map import *
+from enemies import *
 
 def main():
     pygame.init()
@@ -11,22 +12,32 @@ def main():
     clock = pygame.time.Clock()
 
     player = Player(SPAWN_POS[0], SPAWN_POS[1])
+    enemies = [
+        Enemy(320, 320, [(320, 320), (640, 320)]),
+        Enemy(640, 500, [(640, 500), (640, 800)]),
+        Enemy(900, 300, [(900, 300), (900, 600)]),
+    ]
 
     while True:
-
-       
         
 
         clock.tick(FPS)
+        dt = clock.get_time() / 1000.0
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+        
+        cam_x = int(player.x - WIDTH // 2)
+        cam_y = int(player.y - HEIGHT // 2)
 
         keys = pygame.key.get_pressed()
         player.update(keys)
-        cam_x = int(player.x - WIDTH // 2)
-        cam_y = int(player.y - HEIGHT // 2)
+
+        for enemy in enemies: 
+            enemy.update(dt, player)
+        
 
         screen.fill(BLACK)
 
@@ -40,6 +51,10 @@ def main():
                 elif tile == 'C':
                     pygame.draw.rect(screen, YELLOW, rect)
         player.draw(screen, cam_x, cam_y)
+    
+        for enemy in enemies:
+            enemy.draw(screen, cam_x, cam_y)
+    
         pygame.display.flip()
 
 
