@@ -38,9 +38,9 @@ def main():
         keys = pygame.key.get_pressed()
         player.update(keys)
 
-        PLAYER_TILE_X = int(player.x // TILE_SIZE)
-        PLAYER_TILE_Y = int(player.y // TILE_SIZE)
-        CURRENT_TILE = get_tile(PLAYER_TILE_X, PLAYER_TILE_Y)
+        PLAYER_TILE_X = int((player.x + player.size / 2) // TILE_SIZE)
+        PLAYER_TILE_Y = int((player.y  + player.size / 2) // TILE_SIZE)
+        tile = TILE_MAP[PLAYER_TILE_Y][PLAYER_TILE_X]
         
 
         for enemy in enemies: 
@@ -67,9 +67,13 @@ def main():
         for enemy in enemies:
             enemy.draw(screen, cam_x, cam_y)
 
-        if get_tile(PLAYER_TILE_X, PLAYER_TILE_Y) == "X" and player.has_key:
-            font = pygame.font.SysFont(None, 48)
-            text = font.render("You have the compound!", True, WHITE)
+        if tile == 'K':
+            player.pickup_key()
+            TILE_MAP[PLAYER_TILE_Y][PLAYER_TILE_X] = "."
+
+        elif tile == "X" and player.has_key:
+            player.carrying = True
+            TILE_MAP[PLAYER_TILE_Y][PLAYER_TILE_X] = "."
 
             TILE_MAP[PLAYER_TILE_Y][PLAYER_TILE_X] = "."
     
