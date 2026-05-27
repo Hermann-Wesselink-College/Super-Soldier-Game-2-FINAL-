@@ -1,8 +1,8 @@
 import pygame
 import math
-import enemies
 from settings import *
 from game_map import *
+
 
 
 class Player:
