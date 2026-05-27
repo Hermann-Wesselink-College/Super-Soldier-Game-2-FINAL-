@@ -15,6 +15,8 @@ class Player:
         self.carrying = False
         self.speed = 3.0
         self.size = PLAYER_SIZE
+        self.has_key = False
+        self.carrying = False
 
     def move(self, dx, dy):
         self.x += dx
@@ -60,10 +62,15 @@ class Player:
                 dy = enemy.y - self.y
                 angle_to_enemy = math.atan2(dy, dx)
                 angle_diff = abs(angle_to_enemy - self.angle) % (2 * math.pi)
-                if angle_diff < 0.1 and math.hypot(dx, dy) < 500:
+                if angle_diff < 20 and math.hypot(dx, dy) < 500:
                     enemy.health -= 50
                     if enemy.health <= 0:
                         enemy.alive = False      
             return True
         return False
+    
+    def pickup_key(self):
+        if get_tile(int(self.x // TILE_SIZE), int(self.y // TILE_SIZE)) == 'K':
+            self.has_key = True
+            self.carrying = True
     

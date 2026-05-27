@@ -28,6 +28,9 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:  # Left click
+                    player.shoot(enemies)
         
         cam_x = int(player.x - WIDTH // 2)
         cam_y = int(player.y - HEIGHT // 2)
@@ -50,6 +53,10 @@ def main():
                     pygame.draw.rect(screen, DARK_GREEN, rect)
                 elif tile == 'C':
                     pygame.draw.rect(screen, YELLOW, rect)
+                elif tile == 'K':
+                    pygame.draw.rect(screen, BLUE, rect)
+                elif tile == 'X':
+                    pygame.draw.rect(screen, (139, 69, 19), rect)
         player.draw(screen, cam_x, cam_y)
     
         for enemy in enemies:
