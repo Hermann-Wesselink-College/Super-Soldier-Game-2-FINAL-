@@ -1,5 +1,5 @@
 import math
-import player
+
 
 # screen size
 WIDTH = 1280
@@ -9,7 +9,7 @@ TILE_SIZE = 64
 
 # player
 PLAYER_SPEED = 3.0
-PLAYER_SIZE = 16
+PLAYER_SIZE = 15
 PLAYER_HEALTH = 100
 MAX_AMMO = 12
 SPAWN_POS = (128, 500)
