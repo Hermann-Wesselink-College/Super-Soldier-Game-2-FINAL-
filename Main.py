@@ -12,13 +12,28 @@ def main():
     clock = pygame.time.Clock()
 
     player = Player(SPAWN_POS[0], SPAWN_POS[1])
+
+    
+
+    
+
     enemies = [
         Enemy(320, 320, [(320, 320), (640, 320)]),
         Enemy(640, 500, [(640, 500), (640, 800)]),
         Enemy(900, 300, [(900, 300), (900, 600)]),
     ]
 
+    game_state = "playing"
+
     while True:
+
+        if game_state == "WIN":
+            screen.fill(BLACK)
+            font = pygame.font.SysFont(None, 72)
+            text = font.render("YOU WIN!", True, GREEN)
+            screen.blit(text,  (WIDTH//2 - 200, HEIGHT//2))
+            pygame.display.flip()
+            continue
         
 
         clock.tick(FPS)
@@ -42,11 +57,26 @@ def main():
         tile_y = int(player.y // TILE_SIZE)
         player_tile = get_tile(tile_x, tile_y)
 
+        font = pygame.font.SysFont(None, 36)
+
+      
+
+        spawn_x, spawn_y = SPAWN_POS
+
+        distance = ((player.x - spawn_x) ** 2 + (player.y - spawn_y) ** 2) ** 0.5
+
+        if player.carrying and distance < 40:
+            game_state = "WIN"
+
         for enemy in enemies: 
             enemy.update(dt, player)
         
 
         screen.fill(BLACK)
+
+        if player.carrying:
+            text = font.render("You have the compound! Return to spawn!", True, WHITE)
+            screen.blit(text, (20, 20))
 
         for y, row in enumerate(TILE_MAP):
             for x, tile in enumerate(row):
@@ -61,10 +91,17 @@ def main():
                     pygame.draw.rect(screen, BLUE, rect)
                 elif tile == 'X':
                     pygame.draw.rect(screen, (139, 69, 19), rect)
+                
         player.draw(screen, cam_x, cam_y)
-    
+        
+
         for enemy in enemies:
             enemy.draw(screen, cam_x, cam_y)
+
+        if player.carrying:
+            font = pygame.font.SysFont(None, 36)
+            text = font.render("You have the compound! Return to spawn!", True, WHITE)
+            screen.blit(text, (20, 20))
 
         if player_tile == 'K':
             player.pickup_key()
