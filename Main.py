@@ -40,7 +40,7 @@ def main():
 
         tile_x = int(player.x // TILE_SIZE)
         tile_y = int(player.y // TILE_SIZE)
-        tile = get_tile(tile_x, tile_y)
+        player_tile = get_tile(tile_x, tile_y)
 
         for enemy in enemies: 
             enemy.update(dt, player)
@@ -66,11 +66,11 @@ def main():
         for enemy in enemies:
             enemy.draw(screen, cam_x, cam_y)
 
-        if tile == 'K':
+        if player_tile == 'K':
             player.pickup_key()
             TILE_MAP[tile_y][tile_x] = "."
 
-        elif tile == "X" and player.has_key:
+        elif player_tile == "X" and player.has_key:
             player.carrying = True
             TILE_MAP[tile_y][tile_x] = "."
             print("CHEST OPENED")
