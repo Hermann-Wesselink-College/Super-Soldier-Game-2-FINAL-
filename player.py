@@ -1,5 +1,6 @@
 import pygame
 import math
+import enemies
 from settings import *
 from game_map import *
 
@@ -12,7 +13,7 @@ class Player:
         self.ammo = 12
         self.angle = 0.0
         self.carrying = False
-        self.speed = 1.0
+        self.speed = 3.0
         self.size = PLAYER_SIZE
 
     def move(self, dx, dy):
@@ -46,3 +47,23 @@ class Player:
 
     def draw(self, screen, cam_x, cam_y):
         pygame.draw.circle(screen, GREEN, (int(self.x - cam_x), int(self.y - cam_y)), self.size)
+
+    #a shoot function for the player
+    def shoot(self, enemies):
+        if self.ammo > 0:
+            self.ammo -= 1
+
+            for enemy in enemies:
+                if not enemy.alive:
+                    continue
+                dx = enemy.x - self.x
+                dy = enemy.y - self.y
+                angle_to_enemy = math.atan2(dy, dx)
+                angle_diff = abs(angle_to_enemy - self.angle) % (2 * math.pi)
+                if angle_diff < 0.1 and math.hypot(dx, dy) < 500:
+                    enemy.health -= 50
+                    if enemy.health <= 0:
+                        enemy.alive = False      
+            return True
+        return False
+    
