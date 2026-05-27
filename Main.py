@@ -38,6 +38,11 @@ def main():
         keys = pygame.key.get_pressed()
         player.update(keys)
 
+        PLAYER_TILE_X = int(player.x // TILE_SIZE)
+        PLAYER_TILE_Y = int(player.y // TILE_SIZE)
+        CURRENT_TILE = get_tile(PLAYER_TILE_X, PLAYER_TILE_Y)
+        
+
         for enemy in enemies: 
             enemy.update(dt, player)
         
@@ -62,11 +67,11 @@ def main():
         for enemy in enemies:
             enemy.draw(screen, cam_x, cam_y)
 
-        if player.has_key and get_tile(int(player.x // TILE_SIZE), int(player.y // TILE_SIZE)) == 'X':
-            font = pygame.font.SysFont(None, 72)
+        if get_tile(PLAYER_TILE_X, PLAYER_TILE_Y) == "X" and player.has_key:
+            font = pygame.font.SysFont(None, 48)
             text = font.render("You have the compound!", True, WHITE)
-            
-            TILE_MAP[player.x][player.y] = '.'
+
+            TILE_MAP[PLAYER_TILE_Y][PLAYER_TILE_X] = "."
     
         pygame.display.flip()
 

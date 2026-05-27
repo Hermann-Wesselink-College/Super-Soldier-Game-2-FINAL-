@@ -1,4 +1,5 @@
 import math
+import player
 
 # screen size
 WIDTH = 1280
@@ -12,6 +13,7 @@ PLAYER_SIZE = 16
 PLAYER_HEALTH = 100
 MAX_AMMO = 12
 SPAWN_POS = (128, 500)
+
 
 # Enemies
 ENEMY_SPEED = 1.5
