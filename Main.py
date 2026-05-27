@@ -38,10 +38,9 @@ def main():
         keys = pygame.key.get_pressed()
         player.update(keys)
 
-        PLAYER_TILE_X = int((player.x) // TILE_SIZE)
-        PLAYER_TILE_Y = int((player.y) // TILE_SIZE)
-        tile = TILE_MAP[PLAYER_TILE_Y][PLAYER_TILE_X]
-        
+        tile_x = int(player.x // TILE_SIZE)
+        tile_y = int(player.y // TILE_SIZE)
+        tile = get_tile(tile_x, tile_y)
 
         for enemy in enemies: 
             enemy.update(dt, player)
@@ -69,13 +68,12 @@ def main():
 
         if tile == 'K':
             player.pickup_key()
-            TILE_MAP[PLAYER_TILE_Y][PLAYER_TILE_X] = "."
+            TILE_MAP[tile_y][tile_x] = "."
 
         elif tile == "X" and player.has_key:
             player.carrying = True
-            TILE_MAP[PLAYER_TILE_Y][PLAYER_TILE_X] = "."
-
-            TILE_MAP[PLAYER_TILE_Y][PLAYER_TILE_X] = "."
+            TILE_MAP[tile_y][tile_x] = "."
+            print("CHEST OPENED")
     
         pygame.display.flip()
 
