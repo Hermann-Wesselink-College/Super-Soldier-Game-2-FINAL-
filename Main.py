@@ -38,8 +38,8 @@ def main():
         keys = pygame.key.get_pressed()
         player.update(keys)
 
-        PLAYER_TILE_X = int((player.x + player.size / 2) // TILE_SIZE)
-        PLAYER_TILE_Y = int((player.y  + player.size / 2) // TILE_SIZE)
+        PLAYER_TILE_X = int((player.x) // TILE_SIZE)
+        PLAYER_TILE_Y = int((player.y) // TILE_SIZE)
         tile = TILE_MAP[PLAYER_TILE_Y][PLAYER_TILE_X]
         
 
