@@ -23,7 +23,7 @@ class Enemy:
             return
 
         # get current patrol target
-        if self.chasing:
+        if self.chasing == True:
             target_x, target_y = player.x, player.y
         else:
             target_x, target_y = self.patrol[self.patrol_index]
@@ -54,6 +54,7 @@ class Enemy:
 
         if angle_diff < math.radians(ENEMY_FOV_ANGLE) and dist_to_player < ENEMY_FOV_RANGE:
             self.see_timer += dt
+            self.chasing = True
         else:
             self.see_timer = max(0.0, self.see_timer - dt)
 
