@@ -1,6 +1,7 @@
 
 import pygame
 import math
+import player
 from settings import *
 from game_map import is_wall 
 
@@ -22,7 +23,10 @@ class Enemy:
             return
 
         # get current patrol target
-        target_x, target_y = self.patrol[self.patrol_index]
+        if self.chasing:
+            target_x, target_y = player.x, player.y
+        else:
+            target_x, target_y = self.patrol[self.patrol_index]
 
         # move toward target
         dx = target_x - self.x
@@ -55,6 +59,11 @@ class Enemy:
 
         if self.see_timer >= ENEMEY_DETECT_TIME:
             self.chasing = True
+
+        if self.chasing:
+            dist_to_player = math.hypot(dx_p, dy_p)
+            if dist_to_player > ENEMY_FOV_RANGE:
+                player.health -= ENEMY_SHOOT_RANGE * dt
     
     def draw(self, screen, cam_x, cam_y):
         if self.alive:
