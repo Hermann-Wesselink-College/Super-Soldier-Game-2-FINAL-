@@ -67,6 +67,8 @@ def main():
 
         if player.carrying and distance < 40:
             game_state = "WIN"
+        elif player.health <= 0:
+            game_state = "LOSE"
 
         for enemy in enemies: 
             enemy.update(dt, player)
