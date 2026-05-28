@@ -74,9 +74,7 @@ def main():
 
         screen.fill(BLACK)
 
-        if player.carrying:
-            text = font.render("You have the compound! Return to spawn!", True, WHITE)
-            screen.blit(text, (20, 20))
+        
 
         for y, row in enumerate(TILE_MAP):
             for x, tile in enumerate(row):
@@ -100,7 +98,7 @@ def main():
 
         if player.carrying:
             font = pygame.font.SysFont(None, 36)
-            text = font.render("You have the compound! Return to spawn!", True, WHITE)
+            text = font.render("You have the key! Get the compound!", True, WHITE)
             screen.blit(text, (20, 20))
 
         if player_tile == 'K':
@@ -108,9 +106,12 @@ def main():
             TILE_MAP[tile_y][tile_x] = "."
 
         elif player_tile == "X" and player.has_key:
+            font = pygame.font.SysFont(None, 36)
+            text = font.render("You picked up the compound! Get back to the spawn!", True, WHITE)
+            screen.blit(text, (20, 60))
             player.carrying = True
             TILE_MAP[tile_y][tile_x] = "."
-            print("CHEST OPENED")
+            
     
         pygame.display.flip()
 
