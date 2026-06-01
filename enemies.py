@@ -1,12 +1,9 @@
 
 import pygame
 import math
-<<<<<<< HEAD
 import player
-=======
 
 # Haalt instellingen op
->>>>>>> ab87c773af2a0d216e9e65ffa5d774bbeb04eda4
 from settings import *
 
 # Functie om te checken of een tile een muur is
@@ -108,11 +105,8 @@ class Enemy:
             
             # Verhoog timer als speler gezien wordt
             self.see_timer += dt
-<<<<<<< HEAD
             self.chasing = True
-=======
         
->>>>>>> ab87c773af2a0d216e9e65ffa5d774bbeb04eda4
         else:
             # Laat timer langzaam afnemen als speler niet zichtbaar is
             self.see_timer = max(0.0, self.see_timer - dt)
