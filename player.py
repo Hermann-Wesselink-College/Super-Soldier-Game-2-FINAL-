@@ -9,7 +9,7 @@ from game_map import *
 
 def wall_between(x1, y1, x2, y2):
     #True als er een muur tussen (x1, y1) en (x2, y2) zit
-    steps = int(math.hypot(x2 - x1, y2 - y1)) / (TILE_SIZE // 2)
+    steps = int(math.hypot(x2 - x1, y2 - y1)) // (TILE_SIZE // 2)
     for i in range(1, steps):
         t = i / steps
         mx = int((x1 + (x2 - x1) * t) // TILE_SIZE)
@@ -134,6 +134,8 @@ class Player:
             
             # Gebruikt 1 kogel            
             self.ammo -= 1
+
+            hit_one = False
 
             # Gaat langs alle enemies            
             for enemy in enemies:
