@@ -117,8 +117,10 @@ class Enemy:
 
         if self.chasing:
             dist_to_player = math.hypot(dx_p, dy_p)
-            if dist_to_player > ENEMY_FOV_RANGE:
+            if dist_to_player < ENEMY_FOV_RANGE:
                 player.health -= ENEMY_SHOOT_RANGE * dt
+            elif dist_to_player > ENEMY_SHOOT_RANGE:
+                self.chasing = False
     
     # Tekent de enemy op het scherm
     def draw(self, screen, cam_x, cam_y):
