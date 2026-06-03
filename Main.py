@@ -69,7 +69,15 @@ def main():
             
             # Gaat terug naar het begin van de loop
             continue
-        
+
+        if game_state == "LOSE":
+            screen.fill(BLACK)
+            font = pygame.font.SysFont(None, 72)
+            text = font.render("YOU DIED!", True, RED)
+            screen.blit(text, (WIDTH//2 - 150, HEIGHT//2))
+            pygame.display.flip()
+            continue
+                
         # Zorgt dat het spel op de juiste FPS draait
         clock.tick(FPS)
         
