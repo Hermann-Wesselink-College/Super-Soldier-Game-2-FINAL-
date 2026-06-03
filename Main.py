@@ -105,7 +105,7 @@ def main():
         keys = pygame.key.get_pressed()
         
         # Update de speler
-        player.update(keys)
+        player.update(keys, cam_x, cam_y)
 
         # Zet spelerpositie om naar tile positie
         tile_x = int(player.x // TILE_SIZE)

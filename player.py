@@ -7,6 +7,16 @@ from settings import *
 # Importeert functies uit game_map.py
 from game_map import *
 
+def wall_between(x1, y1, x2, y2):
+    #True als er een muur tussen (x1, y1) en (x2, y2) zit
+    steps = int(math.hypot(x2 - x1, y2 - y1)) / (TILE_SIZE // 2)
+    for i in range(1, steps):
+        t = i / steps
+        mx = int((x1 + (x2 - x1) * t) // TILE_SIZE)
+        my = int((y1 + (y2 - y1) * t) // TILE_SIZE)
+        if is_wall(mx, my):
+            return True
+    return False    
 
 # Player class
 # Zorgt voor alles wat met de speler te maken heeft
@@ -107,8 +117,8 @@ class Player:
         mx, my = pygame.mouse.get_pos()
         
         # Bereken richting van speler naar muis
-        # atan2 geeft een hoek/richting terug        
-        self.angle = math.atan2(my -self.y, mx - self.x)
+        # atan2 geeft een hoek/richting terug  
+        self.angle = math.atan2((my + cam_y) - self.y, (mx + cam_x) - self.x)      
 
     # Tekent de speler op het scherm
     def draw(self, screen, cam_x, cam_y):
@@ -131,6 +141,8 @@ class Player:
                 # Slaat dode enemies over                
                 if not enemy.alive:
                     continue
+                if hit_one :
+                    continue
                 
                 # Verschil tussen enemy en speler                
                 dx = enemy.x - self.x
@@ -140,22 +152,21 @@ class Player:
                 angle_to_enemy = math.atan2(dy, dx)
                 
                 # Verschil tussen kijkrichting speler en enemy                
-                angle_diff = abs(angle_to_enemy - self.angle) % (2 * math.pi)
+                angle_diff = abs(angle_to_enemy - self.angle + math.pi) % (2 * math.pi) -math.pi
                 
                 # Controleert:
                 # - of enemy dichtbij kijkrichting zit
                 # - en binnen bereik is                
-                if angle_diff < 20 and math.hypot(dx, dy) < 500:
+                if abs(angle_diff) < 0.15 and math.hypot(dx, dy) < 500:
                     
-                    # Enemy verliest health
-                    enemy.health -= 50
+                    #Checkt of er een muur tussen speler en enemy zit
+                    if not wall_between(self.x, self.y, enemy.x, enemy.y):
+                        enemy.health -= 50
+                        if enemy.health <= 0:
+                            enemy.alive = False
+                        hit_one = True
                     
-                    # Als enemy geen health meer heeft
-                    if enemy.health <= 0:
-                        
-                        # Enemy gaat dood                        
-                        enemy.alive = False      
-            
+    
             # Geeft True terug als er geschoten is            
             return True
         
