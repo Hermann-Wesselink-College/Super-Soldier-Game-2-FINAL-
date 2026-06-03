@@ -112,13 +112,13 @@ class Enemy:
             self.see_timer = max(0.0, self.see_timer - dt)
 
         # Als speler lang genoeg gezien is gaat enemy achtervolgen
-        if self.see_timer >= ENEMEY_DETECT_TIME:
+        if self.see_timer >= ENEMY_DETECT_TIME:
             self.chasing = True
 
         if self.chasing:
             dist_to_player = math.hypot(dx_p, dy_p)
             if dist_to_player < ENEMY_FOV_RANGE:
-                player.health -= ENEMY_SHOOT_RANGE * dt
+                player.health -= ENEMY_DAMAGE * dt
             elif dist_to_player > ENEMY_SHOOT_RANGE:
                 self.chasing = False
     
