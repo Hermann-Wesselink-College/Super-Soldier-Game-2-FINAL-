@@ -13,6 +13,8 @@ from game_map import *
 # Importeert de Enemy class uit enemies.py
 from enemies import *
 
+# Importeert de hud file
+from hud import *
 
 # Hoofdfunctie van het spel
 def main():
@@ -220,7 +222,22 @@ def main():
             
             # Verwijdert de chest van de map
             TILE_MAP[tile_y][tile_x] = "."
-            
+
+            # Hud tekenen
+        hud_font = pygame.font.SysFont(None, 36)
+
+        # Health bar tekenen
+        pygame.draw.rect(screen, (80, 0, 0), (20, HEIGHT -40, 200, 20))
+        # Health bar fill
+        hp_width = int(200 * (player.health / PLAYER_HEALTH))
+        pygame.draw.rect(screen, (220, 50, 50), (20, HEIGHT -40, hp_width, 20))
+        pygame.draw.rect(screen, WHITE, (20, HEIGHT - 40, 200, 20), 2)
+        hud_font.render("HP", True, WHITE)
+        screen.blit(hud_font.render("HP", True, WHITE), (230, HEIGHT - 40)) 
+
+        # Ammo count tekenen
+        ammo_text = hud_font.render(f"AMMO: {player.ammo} / {MAX_AMMO}", True, YELLOW)
+        screen.blit(ammo_text, (WIDTH - 200, HEIGHT - 65))
         # Update het volledige scherm
         # Alles wat getekend is wordt nu zichtbaar
         pygame.display.flip()
