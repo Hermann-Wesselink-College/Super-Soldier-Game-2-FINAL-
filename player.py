@@ -58,7 +58,7 @@ class Player:
 
     # Update functie
     # Wordt elke frame uitgevoerd
-    def update(self, keys):
+    def update(self, keys, cam_x, cam_y):
         
         # Beweging van de speler op basis van toetsenbord input
         
