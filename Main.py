@@ -129,7 +129,7 @@ def main():
             
             # Dan wint de speler            
             game_state = "WIN"
-        elif player.health <= 0:
+        if player.health <= 0:
             game_state = "LOSE"
 
         # Update alle enemies        
