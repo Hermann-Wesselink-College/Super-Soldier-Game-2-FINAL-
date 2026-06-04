@@ -121,10 +121,11 @@ class Player:
         self.angle = math.atan2((my + cam_y) - self.y, (mx + cam_x) - self.x)      
 
     # Tekent de speler op het scherm
-    def draw(self, screen, cam_x, cam_y):
+    def draw(self, screen, cam_x, cam_y, player_img):
         
-        # Tekent speler als groene cirkel        
-        pygame.draw.circle(screen, GREEN, (int(self.x - cam_x), int(self.y - cam_y)), self.size)
+        rotated_img = pygame.transform.rotate(player_img, -math.degrees(self.angle))
+        new_rect = rotated_img.get_rect(center=(int(self.x - cam_x), int(self.y - cam_y)))
+        screen.blit(rotated_img, new_rect.topleft)
 
     # shoot function for the player
     def shoot(self, enemies):
