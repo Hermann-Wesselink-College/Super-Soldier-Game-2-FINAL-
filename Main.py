@@ -27,9 +27,24 @@ def main():
     
     # Maakt het scherm aan met de breedte en hoogte uit settings.py
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-
-    player_img = pygame.image.load("assets/Player.png").convert_alpha()
     
+    # PNG's
+    player_img = pygame.image.load("assets/Player.png").convert_alpha()
+    enemy_img = pygame.image.load("assets/enemy.png").convert_alpha()
+    bullet_img = pygame.image.load("assets/bullet.png").convert_alpha()
+
+    # Tile textures
+    wall_img = pygame.image.load("assets/wall.png").convert()
+    floor_img = pygame.image.load("assets/floor.png").convert()
+    key_img = pygame.image.load("assets/key.png").convert_alpha()
+    chest_img = pygame.image.load("assets/chest.png").convert_alpha()
+
+    # Scale tile textures to TILE_SIZE (64x64)
+    wall_img = pygame.transform.scale(wall_img, (TILE_SIZE, TILE_SIZE))
+    floor_img = pygame.transform.scale(floor_img, (TILE_SIZE, TILE_SIZE))
+    key_img = pygame.transform.scale(key_img, (TILE_SIZE, TILE_SIZE))
+    chest_img = pygame.transform.scale(chest_img, (TILE_SIZE, TILE_SIZE))
+   
     # Zet de titel van het spel bovenaan het venster
     pygame.display.set_caption("Evil Israeli camp")
     
@@ -194,28 +209,20 @@ def main():
                 # Controleert welk soort tile het is
 
                 # Muur tile
-                if tile == '#':
-                    pygame.draw.rect(screen, GREY, rect)
-                
-                # Gras/vloer tile
-                elif tile == '.':
-                    pygame.draw.rect(screen, DARK_GREEN, rect)
-                
-                # Compound/objectief tile
-                elif tile == 'C':
-                    pygame.draw.rect(screen, YELLOW, rect)
-                
-                # Sleutel tile
-                elif tile == 'K':
-                    pygame.draw.rect(screen, BLUE, rect)
-                
-                # Chest/kist tile
-                elif tile == 'X':
-                    pygame.draw.rect(screen, (139, 69, 19), rect)
-
+              # Replace the tile drawing IF/ELIF block with this:
+            if tile == '#':
+                screen.blit(wall_img, rect)
+            elif tile == '.':
+                screen.blit(floor_img, rect)
+            elif tile == 'K':
+                screen.blit(floor_img, rect) # Draw floor underneath item
+                screen.blit(key_img, rect)
+            elif tile == 'X':
+                screen.blit(floor_img, rect) # Draw floor underneath item
+                screen.blit(chest_img, rect)
         # Tekent de speler op het scherm
         # cam_x en cam_y zorgen ervoor dat de speler op de juiste plek staat t.o.v. de camera        
-        player.draw(screen, cam_x, cam_y)
+        player.draw(screen, cam_x, cam_y, player_img)
         
         # Gaat door alle enemies heen
         for enemy in enemies:
