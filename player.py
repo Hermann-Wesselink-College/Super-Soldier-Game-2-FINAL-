@@ -122,9 +122,16 @@ class Player:
 
     # Tekent de speler op het scherm
     def draw(self, screen, cam_x, cam_y, player_img):
+        # 1. Scale the raw asset to a reasonable player size first (e.g., 32x32 or 48x48)
+        scaled_img = pygame.transform.scale(player_img, (32, 32))
         
-        rotated_img = pygame.transform.rotate(player_img, -math.degrees(self.angle))
+        # 2. Rotate the scaled image (negate angle because pygame rotates counter-clockwise)
+        rotated_img = pygame.transform.rotate(scaled_img, -math.degrees(self.angle))
+        
+        # 3. Secure the center position so it doesn't wobble or grow
         new_rect = rotated_img.get_rect(center=(int(self.x - cam_x), int(self.y - cam_y)))
+        
+        # 4. Draw to screen
         screen.blit(rotated_img, new_rect.topleft)
 
     # shoot function for the player
