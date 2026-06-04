@@ -160,6 +160,64 @@ def main():
         # Tijd tussen frames in seconden
         dt = clock.get_time() / 1000.0
 
+        # --- PLACE THIS IMMEDIATELY AFTER: dt = clock.get_time() / 1000.0 ---
+
+        # 1. Clear the screen FIRST
+        screen.fill(BLACK)
+
+        # 2. Render Optimized Map Tiles (The camera viewport loop)
+        start_x = max(0, int(cam_x // TILE_SIZE))
+        end_x = min(MAP_WIDTH, int((cam_x + WIDTH) // TILE_SIZE) + 1)
+        start_y = max(0, int(cam_y // TILE_SIZE))
+        end_y = min(MAP_HEIGHT, int((cam_y + HEIGHT) // TILE_SIZE) + 1)
+        
+        for y in range(start_y, end_y):
+            for x in range(start_x, end_x):
+                tile = TILE_MAP[y][x]
+                
+                screen_x = x * TILE_SIZE - cam_x
+                screen_y = y * TILE_SIZE - cam_y
+                
+                # Render Floor Background
+                screen.blit(floor_img, (screen_x, screen_y))
+                
+                # Overlay Objects
+                if tile == '#':
+                    screen.blit(wall_img, (screen_x, screen_y))
+                elif tile == 'K':
+                    screen.blit(key_img, (screen_x, screen_y))
+                elif tile == 'X':
+                    screen.blit(chest_img, (screen_x, screen_y))
+
+        # 3. Update Camera Postion based on Player Movement
+        cam_x = int(player.x - WIDTH // 2)
+        cam_y = int(player.y - HEIGHT // 2)
+
+        keys = pygame.key.get_pressed()
+        player.update(keys, cam_x, cam_y)
+
+        # 4. Update Game Logic and States
+        tile_x = int(player.x // TILE_SIZE)
+        tile_y = int(player.y // TILE_SIZE)
+        player_tile = get_tile(tile_x, tile_y)
+
+        spawn_x, spawn_y = SPAWN_POS
+        distance = ((player.x - spawn_x) ** 2 + (player.y - spawn_y) ** 2) ** 0.5
+
+        if player.carrying and distance < 40:
+            game_state = "WIN"
+        if player.health <= 0:
+            game_state = "LOSE"
+
+        for enemy in enemies: 
+            enemy.update(dt, player)
+
+        # 5. Draw Entities over the rendered background map
+        player.draw(screen, cam_x, cam_y, player_img)
+        
+        for enemy in enemies:
+            enemy.draw(screen, cam_x, cam_y) # Pass enemy_img asset here if you modified enemies.py
+
         # Bekijkt alle events
         for event in pygame.event.get():
             
@@ -221,38 +279,7 @@ def main():
         for enemy in enemies: 
             enemy.update(dt, player)
         
-        # Maakt het scherm zwart voordat alles opnieuw getekend wordt
-        screen.fill(BLACK)
-
-        # Gaat door alle rijen van de map heen
-        for y, row in enumerate(TILE_MAP):
-            
-            # Gaat door alle tiles in de huidige rij        
-            for x, tile in enumerate(row):
-                
-                # Maakt een rechthoek voor de tile
-                # x * TILE_SIZE en y * TILE_SIZE bepalen de positie op de map
-                # cam_x en cam_y zorgen ervoor dat de camera meebeweegt
-                rect = pygame.Rect(x * TILE_SIZE - cam_x, y * TILE_SIZE - cam_y, TILE_SIZE, TILE_SIZE)
-                
-                # Controleert welk soort tile het is
-
-                # Muur tile
-              # Replace the tile drawing IF/ELIF block with this:
-            if tile == '#':
-                screen.blit(wall_img, rect)
-            elif tile == '.':
-                screen.blit(floor_img, rect)
-            elif tile == 'K':
-                screen.blit(floor_img, rect) # Draw floor underneath item
-                screen.blit(key_img, rect)
-            elif tile == 'X':
-                screen.blit(floor_img, rect) # Draw floor underneath item
-                screen.blit(chest_img, rect)
-        # Tekent de speler op het scherm
-        # cam_x en cam_y zorgen ervoor dat de speler op de juiste plek staat t.o.v. de camera        
-        player.draw(screen, cam_x, cam_y, player_img)
-        
+       
         # Gaat door alle enemies heen
         for enemy in enemies:
             
