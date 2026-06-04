@@ -21,9 +21,14 @@ def main():
     
     # Start pygame op 
     pygame.init()
+
+    
+   
     
     # Maakt het scherm aan met de breedte en hoogte uit settings.py
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+    player_img = pygame.image.load("assets/Player.png").convert_alpha()
     
     # Zet de titel van het spel bovenaan het venster
     pygame.display.set_caption("Evil Israeli camp")
