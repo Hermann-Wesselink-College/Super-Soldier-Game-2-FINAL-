@@ -33,6 +33,17 @@ def main():
 
     # Maakt de speler aan op de spawnpositie
     player = Player(SPAWN_POS[0], SPAWN_POS[1])
+
+    import random
+
+    chests = []
+
+    for y, row in enumerate(TILE_MAP):
+        for x, tile in enumerate(row):
+            if tile == "K":
+                chests.append((x, y))
+
+    key_chest = random.choice(chests)
     
     # Lijst met vijanden
     # Elke enemy krijgt een startpositie en een pad waar hij heen beweegt
@@ -221,13 +232,16 @@ def main():
 
         # Controleert of de speler op een sleutel tile staat
         if player_tile == 'K':
-            
-            # Geeft de speler de sleutel
-            player.pickup_key()
-            
-            # Verandert de tile naar vloer zodat de sleutel verdwijnt
-            TILE_MAP[tile_y][tile_x] = "."
 
+            if (tile_x, tile_y) == key_chest:
+
+                player.has_key = True
+                player.pickup_key()
+                TILE_MAP[tile_y][tile_x] = "."
+
+            
+
+       
         # Controleert of de speler op een chest staat en de sleutel heeft
         elif player_tile == "X" and player.has_key:
             
