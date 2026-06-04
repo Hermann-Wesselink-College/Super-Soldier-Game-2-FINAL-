@@ -36,12 +36,27 @@ def main():
     
     # Lijst met vijanden
     # Elke enemy krijgt een startpositie en een pad waar hij heen beweegt
-    enemies = [
-        Enemy(320, 320, [(320, 320), (640, 320)]),
-        Enemy(640, 500, [(640, 500), (640, 800)]),
-        Enemy(900, 300, [(900, 300), (900, 600)]),
-    ]
+    import random
 
+    enemies = []
+
+    for i in range(6):
+
+        patrol = []
+
+        for j in range(4):
+            patrol.append((
+                random.randint(128, 1152),
+                random.randint(128, 1152)
+            ))
+        
+        enemies.append(
+            Enemy(
+                patrol[0][0],
+                patrol[0][1],
+                patrol
+            )
+        )
     # Houdt bij in welke game state het spel zit
     # Bijvoorbeeld "playing" of "WIN"
     game_state = "playing"
