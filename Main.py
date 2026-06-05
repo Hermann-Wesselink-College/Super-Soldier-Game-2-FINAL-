@@ -108,6 +108,7 @@ def main():
         screen.blit(obj_font.render("Press any key to start", True, GREY), (WIDTH//2 - 130, HEIGHT//2 + 140))
         pygame.display.flip()
 
+    pygame.event.clear()
     paused = False
 
     # Oneindige game loop
@@ -245,11 +246,6 @@ def main():
         
         
        
-        # Gaat door alle enemies heen
-        for enemy in enemies:
-            
-            # Tekent elke enemy op het scherm
-            enemy.draw(screen, cam_x, cam_y)
 
         # Controleert of de speler het object draagt
         if player.carrying:
