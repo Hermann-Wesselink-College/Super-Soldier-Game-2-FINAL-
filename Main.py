@@ -89,13 +89,47 @@ def main():
     cam_x = 0
     cam_y = 0
 
+    # Objective popup
+    showing_objective = True
+    obj_font_big = pygame.font.SysFont(None, 64)
+    obj_font = pygame.font.SysFont(None, 32)
+    while showing_objective:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit(); sys.exit()
+            if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                showing_objective = False
+        screen.fill(BLACK)
+        screen.blit(obj_font_big.render("MISSION BRIEFING", True, YELLOW), (WIDTH//2 - 220, HEIGHT//2 - 120))
+        screen.blit(obj_font.render("1. Find the KEY hidden in the camp", True, WHITE), (WIDTH//2 - 220, HEIGHT//2 - 40))
+        screen.blit(obj_font.render("2. Use the key to open the CHEST", True, WHITE), (WIDTH//2 - 220, HEIGHT//2))
+        screen.blit(obj_font.render("3. Carry the compound back to SPAWN", True, WHITE), (WIDTH//2 - 220, HEIGHT//2 + 40))
+        screen.blit(obj_font.render("Watch out — enemies will hunt you!", True, RED), (WIDTH//2 - 220, HEIGHT//2 + 80))
+        screen.blit(obj_font.render("Press any key to start", True, GREY), (WIDTH//2 - 130, HEIGHT//2 + 140))
+        pygame.display.flip()
+
+    paused = False
+
     # Oneindige game loop
     while True:
+
 
          # Zorgt dat het spel op de juiste FPS draait
         clock.tick(FPS)
 
+        if paused:
+            pause_font = pygame.font.SysFont(None, 64)
+            screen.blit(pause_font.render("PAUSED", True, WHITE), (WIDTH//2 - 100, HEIGHT//2 - 60))
+            resume = pygame.font.SysFont(None, 32).render("Press ESC to resume", True, GREY)
+            screen.blit(resume, (WIDTH//2 - 120, HEIGHT//2))
+            pygame.display.flip()
+            continue
+
         screen.fill(BLACK)
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_p:
+                paused = not paused
 
         start_x = max(0, int(cam_x // TILE_SIZE))
         end_x = min(MAP_WIDTH, int((cam_x + WIDTH) // TILE_SIZE) + 1)
@@ -185,7 +219,7 @@ def main():
         player.draw(screen, cam_x, cam_y, player_img)
         
         for enemy in enemies:
-            enemy.draw(screen, cam_x, cam_y) # Pass enemy_img asset here if you modified enemies.py
+            enemy.draw(screen, cam_x, cam_y, enemy_img) # Pass enemy_img asset here if you modified enemies.py
 
         # Bekijkt alle events
         for event in pygame.event.get():
@@ -206,7 +240,7 @@ def main():
                 if event.button == 1:  # Left click
                     
                     # Laat de speler schieten                    
-                    player.shoot(enemies)
+                    player.shoot(enemies, bullet_img)
         
         
        
@@ -274,7 +308,10 @@ def main():
         ammo_text = hud_font.render(f"AMMO: {player.ammo} / {MAX_AMMO}", True, YELLOW)
         screen.blit(ammo_text, (WIDTH - 200, HEIGHT - 65))
         # Update het volledige scherm
+        player.update_bullets(enemies)
         # Alles wat getekend is wordt nu zichtbaar
+        for b in player.bullets:
+            b.draw(screen, cam_x, cam_y)
 
         if game_state == "WIN":
             

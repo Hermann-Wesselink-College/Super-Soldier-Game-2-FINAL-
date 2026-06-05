@@ -211,6 +211,22 @@ class Player:
         # Geeft False terug als speler geen ammo heeft
         return False
     
+    def update_bullets(self, enemies):
+        for b in self.bullets:
+            b.update()
+            if not b.alive:
+                continue
+            for enemy in enemies:
+                if not enemy.alive:
+                    continue
+                if math.hypot(enemy.x - b.x, enemy.y - b.y) < 20:
+                    enemy.health -= 50
+                    if enemy.health <= 0:
+                        enemy.alive = False
+                    b.alive = False
+                    break
+        self.bullets = [b for b in self.bullets if b.alive]
+    
     # Functie om sleutel op te pakken    
     def pickup_key(self):
         
