@@ -120,6 +120,19 @@ def main():
          # Zorgt dat het spel op de juiste FPS draait
         clock.tick(FPS)
 
+                # Events FIRST — always, even when paused
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    paused = not paused
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1 and not paused:
+                    player.shoot(enemies, bullet_img)
+
+       
        
 
         screen.fill(BLACK)
@@ -218,17 +231,7 @@ def main():
         for enemy in enemies:
             enemy.draw(screen, cam_x, cam_y, enemy_img) # Pass enemy_img asset here if you modified enemies.py
 
-        # Bekijkt alle events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_p:
-                    paused = not paused
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    player.shoot(enemies, bullet_img)
+      
         
         
        
