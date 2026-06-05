@@ -7,6 +7,30 @@ from settings import *
 # Importeert functies uit game_map.py
 from game_map import *
 
+class Bullet:
+    def __init__(self, x, y, angle, img):
+        self.x = x
+        self.y = y
+        self.angle = angle
+        self.speed = 8
+        self.alive = True
+        self.img = img
+        self.dx = math.cos(angle) * self.speed
+        self.dy = math.sin(angle) * self.speed
+
+    def update(self):
+        self.x += self.dx
+        self.y += self.dy
+        # Kill if hits wall
+        if is_wall(int(self.x // TILE_SIZE), int(self.y // TILE_SIZE)):
+            self.alive = False
+
+    def draw(self, screen, cam_x, cam_y):
+        scaled = pygame.transform.scale(self.img, (12, 6))
+        rotated = pygame.transform.rotate(scaled, -math.degrees(self.angle))
+        rect = rotated.get_rect(center=(int(self.x - cam_x), int(self.y - cam_y)))
+        screen.blit(rotated, rect.topleft)
+
 def wall_between(x1, y1, x2, y2):
     #True als er een muur tussen (x1, y1) en (x2, y2) zit
     steps = int(math.hypot(x2 - x1, y2 - y1)) // (TILE_SIZE // 2)
@@ -49,6 +73,9 @@ class Player:
         
         # Of de speler een sleutel heeft
         self.has_key = False
+
+        #kogels van de speler
+        self.bullets = []
         
     # Simpele move functie
     # Verplaatst speler met dx en dy
@@ -135,13 +162,14 @@ class Player:
         screen.blit(rotated_img, new_rect.topleft)
 
     # shoot function for the player
-    def shoot(self, enemies):
+    def shoot(self, enemies, bullet_img):
         
         # Controleert of speler nog ammo heeft
         if self.ammo > 0:
             
             # Gebruikt 1 kogel            
             self.ammo -= 1
+            self.bullets.append(Bullet(self.x, self.y, self.angle, bullet_img))
 
             hit_one = False
 
