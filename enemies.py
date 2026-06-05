@@ -132,28 +132,23 @@ class Enemy:
 
     
     # Tekent de enemy op het scherm
-    def draw(self, screen, cam_x, cam_y):
-        
-        # Alleen tekenen als enemy leeft
-        if self.alive:
-            
-            # Tekent de enemy als een rode cirkel
-            pygame.draw.circle(screen, RED, (int(self.x - cam_x), int(self.y - cam_y)), 12)
-            
-            # Gezichtsveld (FOV) berekenen
-            fov = math.radians(ENEMY_FOV_ANGLE)
-            
-            # Linker kant van FOV
-            left_x = self.x + math.cos(self.angle - fov) * ENEMY_FOV_RANGE
-            left_y = self.y + math.sin(self.angle - fov) * ENEMY_FOV_RANGE
-            
-            # Rechter kant van FOV
-            right_x = self.x + math.cos(self.angle + fov) * ENEMY_FOV_RANGE
-            right_y = self.y + math.sin(self.angle + fov) * ENEMY_FOV_RANGE
+    def draw(self, screen, cam_x, cam_y, enemy_img):
+        if not self.alive:
+            return
 
-            # Tekent het FOV als een driehoek
-            pygame.draw.polygon(screen, (255, 255, 0, 80), [
-                (int(self.x - cam_x), int(self.y - cam_y)),
-                (int(left_x - cam_x), int(left_y - cam_y)),
-                (int(right_x - cam_x), int(right_y - cam_y))
-            ]) 
+        scaled = pygame.transform.scale(enemy_img, (32, 32))
+        rotated = pygame.transform.rotate(scaled, -math.degrees(self.angle))
+        rect = rotated.get_rect(center=(int(self.x - cam_x), int(self.y - cam_y)))
+        screen.blit(rotated, rect.topleft)
+
+        # FOV triangle
+        fov = math.radians(ENEMY_FOV_ANGLE)
+        left_x  = self.x + math.cos(self.angle - fov) * ENEMY_FOV_RANGE
+        left_y  = self.y + math.sin(self.angle - fov) * ENEMY_FOV_RANGE
+        right_x = self.x + math.cos(self.angle + fov) * ENEMY_FOV_RANGE
+        right_y = self.y + math.sin(self.angle + fov) * ENEMY_FOV_RANGE
+        pygame.draw.polygon(screen, (255, 255, 0, 80), [
+            (int(self.x - cam_x), int(self.y - cam_y)),
+            (int(left_x - cam_x), int(left_y - cam_y)),
+            (int(right_x - cam_x), int(right_y - cam_y))
+        ])
