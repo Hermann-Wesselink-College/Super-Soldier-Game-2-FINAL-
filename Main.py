@@ -33,6 +33,7 @@ def main():
     enemy_img = pygame.image.load("assets/enemy.png").convert_alpha()
     bullet_img = pygame.image.load("assets/bullet.png").convert_alpha()
     tree_img = pygame.image.load("assets/tree.png").convert_alpha()
+    tent_img = pygame.image.load("assets/tent.png").convert_alpha()
     
     # Tile textures
     wall_img = pygame.image.load("assets/wall.png").convert()
@@ -46,7 +47,7 @@ def main():
     key_img = pygame.transform.scale(key_img, (TILE_SIZE, TILE_SIZE))
     chest_img = pygame.transform.scale(chest_img, (TILE_SIZE, TILE_SIZE))
     tree_img = pygame.transform.scale(tree_img, (TILE_SIZE, TILE_SIZE))
-
+    tent_img = pygame.transform.scale(tent_img, (TILE_SIZE, TILE_SIZE))
     # Zet de titel van het spel bovenaan het venster
     pygame.display.set_caption("Evil Israeli camp")
     
@@ -194,6 +195,8 @@ def main():
                     screen.blit(chest_img, (screen_x, screen_y))
                 elif tile == 'T':
                     screen.blit(tree_img, (screen_x, screen_y))
+                elif tile == 'N':
+                    screen.blit(tent_img, (screen_x, screen_y))
 
         # 3. Update Camera Postion based on Player Movement
         cam_x = int(player.x - WIDTH // 2)

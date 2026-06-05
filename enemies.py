@@ -148,7 +148,7 @@ class Enemy:
         left_y  = self.y + math.sin(self.angle - fov) * ENEMY_FOV_RANGE
         right_x = self.x + math.cos(self.angle + fov) * ENEMY_FOV_RANGE
         right_y = self.y + math.sin(self.angle + fov) * ENEMY_FOV_RANGE
-        pygame.draw.polygon(screen, (255, 255, 0, 80), [
+        pygame.draw.polygon(screen, (255, 255, 0, 25), [
             (int(self.x - cam_x), int(self.y - cam_y)),
             (int(left_x - cam_x), int(left_y - cam_y)),
             (int(right_x - cam_x), int(right_y - cam_y))
