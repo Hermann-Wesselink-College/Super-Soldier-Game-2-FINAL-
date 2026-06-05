@@ -13,8 +13,7 @@ from game_map import *
 # Importeert de Enemy class uit enemies.py
 from enemies import *
 
-# Importeert de hud file
-from hud import *
+
 
 # Hoofdfunctie van het spel
 def main():
