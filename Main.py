@@ -140,27 +140,6 @@ def main():
         start_y = max(0, int(cam_y // TILE_SIZE))
         end_y = min(MAP_HEIGHT, int((cam_y + HEIGHT) // TILE_SIZE) + 1)
         
-        for y in range(start_y, end_y):
-            for x in range(start_x, end_x):
-                tile = TILE_MAP[y][x]
-                
-                # Calculate screen relative coordinate
-                screen_x = x * TILE_SIZE - cam_x
-                screen_y = y * TILE_SIZE - cam_y
-                
-                # Draw floor underneath everything in the view frame
-                screen.blit(floor_img, (screen_x, screen_y))
-                
-                # Overlay structural or item tiles
-                if tile == '#':
-                    screen.blit(wall_img, (screen_x, screen_y))
-                elif tile == 'K':
-                    screen.blit(key_img, (screen_x, screen_y))
-                elif tile == 'X':
-                    screen.blit(chest_img, (screen_x, screen_y))
-                elif tile == 'T':
-                    screen.blit(floor_img, (screen_x, screen_y))
-                    screen.blit(tree_img, (screen_x, screen_y))
         
                 
        
@@ -197,6 +176,8 @@ def main():
                     screen.blit(key_img, (screen_x, screen_y))
                 elif tile == 'X':
                     screen.blit(chest_img, (screen_x, screen_y))
+                elif tile == 'T':
+                    screen.blit(tree_img, (screen_x, screen_y))
 
         # 3. Update Camera Postion based on Player Movement
         cam_x = int(player.x - WIDTH // 2)
@@ -275,10 +256,9 @@ def main():
         if player_tile == 'K':
 
             if (tile_x, tile_y) == key_chest:
-
-                player.has_key = True
-                player.pickup_key()
-                TILE_MAP[tile_y][tile_x] = "."
+                if (tile_x, tile_y) == key_chest:
+                    player.has_key = True
+                    TILE_MAP[tile_y][tile_x] = "."
 
             
 

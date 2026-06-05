@@ -236,6 +236,5 @@ class Player:
             # Geeft speler de sleutel
             self.has_key = True
             
-            # Laat weten dat speler het compound draagt            
-            self.carrying = True
+            
     
