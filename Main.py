@@ -127,9 +127,10 @@ def main():
 
         screen.fill(BLACK)
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_p:
-                paused = not paused
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    paused = not paused
 
         start_x = max(0, int(cam_x // TILE_SIZE))
         end_x = min(MAP_WIDTH, int((cam_x + WIDTH) // TILE_SIZE) + 1)
