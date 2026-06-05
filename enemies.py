@@ -74,16 +74,22 @@ class Enemy:
             move_x = (dx / distance) * self.speed
             move_y = (dy / distance) * self.speed
             
-            # Check of er geen muur is in X richting
-            if not is_wall(int((self.x + move_x) // TILE_SIZE), int(self.y // TILE_SIZE)):
-                self.x += move_x
-            
-            # Check of er geen muur is in Y richting        
-            if not is_wall(int(self.x // TILE_SIZE), int((self.y + move_y) // TILE_SIZE)):
-                self.y += move_y
-        else:
-            # reached target, switch to next patrol point
-            self.patrol_index = (self.patrol_index + 1) % len(self.patrol)
+           
+            # With this (adds stuck detection):
+            new_x = self.x + move_x
+            new_y = self.y + move_y
+
+            moved = False
+            if not is_wall(int(new_x // TILE_SIZE), int(self.y // TILE_SIZE)):
+                self.x = new_x
+                moved = True
+            if not is_wall(int(self.x // TILE_SIZE), int(new_y // TILE_SIZE)):
+                self.y = new_y
+                moved = True
+
+            # If completely stuck, skip to next patrol point
+            if not moved:
+                self.patrol_index = (self.patrol_index + 1) % len(self.patrol)
 
         # Detectie van de speler (FOV)
 
@@ -98,8 +104,8 @@ class Enemy:
         angle_to_player = math.atan2(dy_p, dx_p)
         
         # Verschil tussen waar enemy kijkt en waar speler is        
-        angle_diff = abs(angle_to_player - self.angle) % (2 * math.pi)
-
+        angle_diff = abs((angle_to_player - self.angle + math.pi) % (2 * math.pi) - math.pi)
+    
         # Check of speler in gezichtsveld + binnen bereik is
         if angle_diff < math.radians(ENEMY_FOV_ANGLE) and dist_to_player < ENEMY_FOV_RANGE:
             
