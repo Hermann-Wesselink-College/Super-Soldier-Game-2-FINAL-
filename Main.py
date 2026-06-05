@@ -304,31 +304,39 @@ def main():
             b.draw(screen, cam_x, cam_y)
 
         if game_state == "WIN":
-            
-            # Maakt het scherm zwart
             screen.fill(BLACK)
-            
-            # Maakt een lettertype aan         
-            font = pygame.font.SysFont(None, 72)
-            
-            # Maakt de tekst "YOU WIN!"           
-            text = font.render("YOU WIN!", True, GREEN)
-            
-            # Tekent de tekst op het scherm            
-            screen.blit(text,  (WIDTH//2 - 200, HEIGHT//2))
-            
-            # Update het scherm
+            font_big = pygame.font.SysFont(None, 72)
+            font_small = pygame.font.SysFont(None, 36)
+            screen.blit(font_big.render("MISSION COMPLETE!", True, GREEN), (WIDTH//2 - 260, HEIGHT//2 - 80))
+            screen.blit(font_small.render("Press R to play again   Q to quit", True, WHITE), (WIDTH//2 - 200, HEIGHT//2 + 20))
             pygame.display.flip()
-            
-            # Gaat terug naar het begin van de loop
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit(); sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_r:
+                        main()   # restart
+                        return
+                    if event.key == pygame.K_q:
+                        pygame.quit(); sys.exit()
             continue
 
         if game_state == "LOSE":
             screen.fill(BLACK)
-            font = pygame.font.SysFont(None, 72)
-            text = font.render("YOU DIED!", True, RED)
-            screen.blit(text, (WIDTH//2 - 150, HEIGHT//2))
+            font_big = pygame.font.SysFont(None, 72)
+            font_small = pygame.font.SysFont(None, 36)
+            screen.blit(font_big.render("YOU DIED!", True, RED), (WIDTH//2 - 160, HEIGHT//2 - 80))
+            screen.blit(font_small.render("Press R to play again   Q to quit", True, WHITE), (WIDTH//2 - 200, HEIGHT//2 + 20))
             pygame.display.flip()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit(); sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_r:
+                        main()
+                        return
+                    if event.key == pygame.K_q:
+                        pygame.quit(); sys.exit()
             continue
 
         pygame.display.flip()
