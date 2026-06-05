@@ -69,7 +69,6 @@ def main():
     
     # Lijst met vijanden
     # Elke enemy krijgt een startpositie en een pad waar hij heen beweegt
-    # Replace the whole enemy creation loop with this:
     import random
 
     def random_floor_pos():
@@ -120,7 +119,7 @@ def main():
          # Zorgt dat het spel op de juiste FPS draait
         clock.tick(FPS)
 
-                # Events FIRST — always, even when paused
+                
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -139,7 +138,7 @@ def main():
 
 
         if paused:
-            # Draw a dark overlay over the current frame
+            # overlay
             overlay = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
             overlay.fill((0, 0, 0, 150))
             screen.blit(overlay, (0, 0))
@@ -164,12 +163,10 @@ def main():
         # Tijd tussen frames in seconden
         dt = clock.get_time() / 1000.0
 
-        # --- PLACE THIS IMMEDIATELY AFTER: dt = clock.get_time() / 1000.0 ---
-
-        # 1. Clear the screen FIRST
+    
         screen.fill(BLACK)
 
-        # 2. Render Optimized Map Tiles (The camera viewport loop)
+        # 2. Render Optimized Map Tiles 
         start_x = max(0, int(cam_x // TILE_SIZE))
         end_x = min(MAP_WIDTH, int((cam_x + WIDTH) // TILE_SIZE) + 1)
         start_y = max(0, int(cam_y // TILE_SIZE))
