@@ -67,20 +67,21 @@ def main():
     
     # Lijst met vijanden
     # Elke enemy krijgt een startpositie en een pad waar hij heen beweegt
+    # Replace the whole enemy creation loop with this:
     import random
 
     def random_floor_pos():
         while True:
-            x = random.randint(1, MAP_WIDTH -2)
-            y = random.randint(1, MAP_HEIGHT -2)
-            if not is_wall(x,y):
-                return (x *TILE_SIZE + TILE_SIZE //2, y * TILE_SIZE + TILE_SIZE //2)
-            
+            x = random.randint(1, MAP_WIDTH - 2)
+            y = random.randint(1, MAP_HEIGHT - 2)
+            if not is_wall(x, y):
+                return (x * TILE_SIZE + TILE_SIZE // 2, y * TILE_SIZE + TILE_SIZE // 2)
+
     enemies = []
     for i in range(6):
         patrol = [random_floor_pos() for _ in range(4)]
         enemies.append(Enemy(patrol[0][0], patrol[0][1], patrol))
-        
+            
     # Houdt bij in welke game state het spel zit
     # Bijvoorbeeld "playing" of "WIN"
     game_state = "playing"
