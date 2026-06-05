@@ -120,21 +120,24 @@ def main():
          # Zorgt dat het spel op de juiste FPS draait
         clock.tick(FPS)
 
-        if paused:
-            pause_font = pygame.font.SysFont(None, 64)
-            screen.blit(pause_font.render("PAUSED", True, WHITE), (WIDTH//2 - 100, HEIGHT//2 - 60))
-            resume = pygame.font.SysFont(None, 32).render("Press ESC to resume", True, GREY)
-            screen.blit(resume, (WIDTH//2 - 120, HEIGHT//2))
-            pygame.display.flip()
-            continue
+       
 
         screen.fill(BLACK)
 
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_p:
-                    paused = not paused
 
+        if paused:
+            # Draw a dark overlay over the current frame
+            overlay = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
+            overlay.fill((0, 0, 0, 150))
+            screen.blit(overlay, (0, 0))
+            pause_font = pygame.font.SysFont(None, 64)
+            screen.blit(pause_font.render("PAUSED", True, WHITE), (WIDTH//2 - 100, HEIGHT//2 - 60))
+            resume_text = pygame.font.SysFont(None, 32).render("Press P to resume", True, GREY)
+            screen.blit(resume_text, (WIDTH//2 - 100, HEIGHT//2))
+            pygame.display.flip()
+            continue
+
+    
         start_x = max(0, int(cam_x // TILE_SIZE))
         end_x = min(MAP_WIDTH, int((cam_x + WIDTH) // TILE_SIZE) + 1)
         start_y = max(0, int(cam_y // TILE_SIZE))
@@ -217,41 +220,35 @@ def main():
 
         # Bekijkt alle events
         for event in pygame.event.get():
-            
-            # Als speler het venster sluit            
             if event.type == pygame.QUIT:
-                
-                # Sluit pygame af                
                 pygame.quit()
-                
-                # Sluit het programma volledig                
                 sys.exit()
-            
-            # Controleert of de muis wordt ingedrukt            
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    paused = not paused
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                
-                # Controleert of linker muisknop wordt gebruikt                
-                if event.button == 1:  # Left click
-                    
-                    # Laat de speler schieten                    
+                if event.button == 1:
                     player.shoot(enemies, bullet_img)
         
         
        
 
-        # Controleert of de speler het object draagt
-        if player.carrying:
-            
-            # Maakt een font aan voor tekst
+        # Replace BOTH message blocks with this:
+        if player.has_key and not player.carrying:
             font = pygame.font.SysFont(None, 36)
-            
-            # Maakt een tekstbericht
-            text = font.render("Compound secured! Return to SPAWN!", True, YELLOW)
+            screen.blit(font.render("You have the key! Find the CHEST!", True, YELLOW), (20, 20))
 
-            
-            # Tekent de tekst linksboven op het scherm
-            screen.blit(text, (20, 20))
+        if player.carrying:
+            font = pygame.font.SysFont(None, 36)
+            screen.blit(font.render("Compound secured! Return to SPAWN!", True, (0, 255, 100)), (20, 20))
 
+        # Highlight spawn zone
+            spawn_screen_x = SPAWN_POS[0] - cam_x
+            spawn_screen_y = SPAWN_POS[1] - cam_y
+            spawn_surf = pygame.Surface((TILE_SIZE * 2, TILE_SIZE * 2), pygame.SRCALPHA)
+            pygame.draw.rect(spawn_surf, (0, 255, 100, 60), (0, 0, TILE_SIZE * 2, TILE_SIZE * 2), border_radius=8)
+            pygame.draw.rect(spawn_surf, (0, 255, 100, 120), (0, 0, TILE_SIZE * 2, TILE_SIZE * 2), 3, border_radius=8)
+            screen.blit(spawn_surf, (spawn_screen_x - TILE_SIZE, spawn_screen_y - TILE_SIZE))
         # Controleert of de speler op een sleutel tile staat
         if player_tile == 'K':
 
@@ -281,13 +278,6 @@ def main():
             # Verwijdert de chest van de map
             TILE_MAP[tile_y][tile_x] = "."
 
-            # Highlight spawn zone
-            spawn_screen_x = SPAWN_POS[0] - cam_x
-            spawn_screen_y = SPAWN_POS[1] - cam_y
-            spawn_surf = pygame.Surface((TILE_SIZE * 2, TILE_SIZE * 2), pygame.SRCALPHA)
-            pygame.draw.rect(spawn_surf, (0, 255, 100, 60), (0, 0, TILE_SIZE * 2, TILE_SIZE * 2), border_radius=8)
-            pygame.draw.rect(spawn_surf, (0, 255, 100, 120), (0, 0, TILE_SIZE * 2, TILE_SIZE * 2), 3, border_radius=8)
-            screen.blit(spawn_surf, (spawn_screen_x - TILE_SIZE, spawn_screen_y - TILE_SIZE))
 
             # Hud tekenen
         hud_font = pygame.font.SysFont(None, 36)
