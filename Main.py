@@ -97,6 +97,9 @@ def main():
 
     # Oneindige game loop
     while True:
+        
+         # Zorgt dat het spel op de juiste FPS draait
+        clock.tick(FPS)
 
         screen.fill(BLACK)
 
@@ -124,37 +127,9 @@ def main():
                 elif tile == 'X':
                     screen.blit(chest_img, (screen_x, screen_y))
 
-        # Controleert of de speler gewonnen heeft
-        if game_state == "WIN":
-            
-            # Maakt het scherm zwart
-            screen.fill(BLACK)
-            
-            # Maakt een lettertype aan         
-            font = pygame.font.SysFont(None, 72)
-            
-            # Maakt de tekst "YOU WIN!"           
-            text = font.render("YOU WIN!", True, GREEN)
-            
-            # Tekent de tekst op het scherm            
-            screen.blit(text,  (WIDTH//2 - 200, HEIGHT//2))
-            
-            # Update het scherm
-            pygame.display.flip()
-            
-            # Gaat terug naar het begin van de loop
-            continue
-
-        if game_state == "LOSE":
-            screen.fill(BLACK)
-            font = pygame.font.SysFont(None, 72)
-            text = font.render("YOU DIED!", True, RED)
-            screen.blit(text, (WIDTH//2 - 150, HEIGHT//2))
-            pygame.display.flip()
-            continue
+        
                 
-        # Zorgt dat het spel op de juiste FPS draait
-        clock.tick(FPS)
+       
         
         # Delta time
         # Tijd tussen frames in seconden
@@ -306,6 +281,35 @@ def main():
         screen.blit(ammo_text, (WIDTH - 200, HEIGHT - 65))
         # Update het volledige scherm
         # Alles wat getekend is wordt nu zichtbaar
+
+        if game_state == "WIN":
+            
+            # Maakt het scherm zwart
+            screen.fill(BLACK)
+            
+            # Maakt een lettertype aan         
+            font = pygame.font.SysFont(None, 72)
+            
+            # Maakt de tekst "YOU WIN!"           
+            text = font.render("YOU WIN!", True, GREEN)
+            
+            # Tekent de tekst op het scherm            
+            screen.blit(text,  (WIDTH//2 - 200, HEIGHT//2))
+            
+            # Update het scherm
+            pygame.display.flip()
+            
+            # Gaat terug naar het begin van de loop
+            continue
+
+        if game_state == "LOSE":
+            screen.fill(BLACK)
+            font = pygame.font.SysFont(None, 72)
+            text = font.render("YOU DIED!", True, RED)
+            screen.blit(text, (WIDTH//2 - 150, HEIGHT//2))
+            pygame.display.flip()
+            continue
+
         pygame.display.flip()
 
 
