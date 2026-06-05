@@ -239,45 +239,6 @@ def main():
                     # Laat de speler schieten                    
                     player.shoot(enemies)
         
-        # Camera positie
-        # Zorgt ervoor dat de speler in het midden van het scherm blijft
-        cam_x = int(player.x - WIDTH // 2)
-        cam_y = int(player.y - HEIGHT // 2)
-
-        # Bekijkt welke toetsen worden ingedrukt
-        keys = pygame.key.get_pressed()
-        
-        # Update de speler
-        player.update(keys, cam_x, cam_y)
-
-        # Zet spelerpositie om naar tile positie
-        tile_x = int(player.x // TILE_SIZE)
-        tile_y = int(player.y // TILE_SIZE)
-        
-        # Kijkt op welke tile de speler staat
-        player_tile = get_tile(tile_x, tile_y)
-
-        # Maakt een font voor tekst
-        font = pygame.font.SysFont(None, 36)
-
-        # Spawnpositie opslaan
-        spawn_x, spawn_y = SPAWN_POS
-
-        # Berekenen van afstand tussen speler en spawn
-        # Stelling van Pythagoras        
-        distance = ((player.x - spawn_x) ** 2 + (player.y - spawn_y) ** 2) ** 0.5
-
-        # Als speler het compound draagt EN dichtbij spawn is
-        if player.carrying and distance < 40:
-            
-            # Dan wint de speler            
-            game_state = "WIN"
-        if player.health <= 0:
-            game_state = "LOSE"
-
-        # Update alle enemies        
-        for enemy in enemies: 
-            enemy.update(dt, player)
         
        
         # Gaat door alle enemies heen
