@@ -32,7 +32,8 @@ def main():
     player_img = pygame.image.load("assets/Player.png").convert_alpha()
     enemy_img = pygame.image.load("assets/enemy.png").convert_alpha()
     bullet_img = pygame.image.load("assets/bullet.png").convert_alpha()
-
+    tree_img = pygame.image.load("assets/tree.png").convert_alpha()
+    
     # Tile textures
     wall_img = pygame.image.load("assets/wall.png").convert()
     floor_img = pygame.image.load("assets/floor.png").convert()
@@ -44,7 +45,8 @@ def main():
     floor_img = pygame.transform.scale(floor_img, (TILE_SIZE, TILE_SIZE))
     key_img = pygame.transform.scale(key_img, (TILE_SIZE, TILE_SIZE))
     chest_img = pygame.transform.scale(chest_img, (TILE_SIZE, TILE_SIZE))
-   
+    tree_img = pygame.transform.scale(tree_img, (TILE_SIZE, TILE_SIZE))
+
     # Zet de titel van het spel bovenaan het venster
     pygame.display.set_caption("Evil Israeli camp")
     
@@ -156,7 +158,9 @@ def main():
                     screen.blit(key_img, (screen_x, screen_y))
                 elif tile == 'X':
                     screen.blit(chest_img, (screen_x, screen_y))
-
+                elif tile == 'T':
+                    screen.blit(floor_img, (screen_x, screen_y))
+                    screen.blit(tree_img, (screen_x, screen_y))
         
                 
        
@@ -219,6 +223,13 @@ def main():
 
         # 5. Draw Entities over the rendered background map
         player.draw(screen, cam_x, cam_y, player_img)
+
+        # Glow effect when carrying compound
+        if player.carrying:
+            glow_surf = pygame.Surface((80, 80), pygame.SRCALPHA)
+            pygame.draw.circle(glow_surf, (255, 255, 0, 60), (40, 40), 40)
+            pygame.draw.circle(glow_surf, (255, 255, 0, 30), (40, 40), 35)
+            screen.blit(glow_surf, (int(player.x - cam_x) - 40, int(player.y - cam_y) - 40))
         
         for enemy in enemies:
             enemy.draw(screen, cam_x, cam_y, enemy_img) # Pass enemy_img asset here if you modified enemies.py
@@ -254,7 +265,8 @@ def main():
             font = pygame.font.SysFont(None, 36)
             
             # Maakt een tekstbericht
-            text = font.render("You have the key! Get the compound!", True, WHITE)
+            text = font.render("Compound secured! Return to SPAWN!", True, YELLOW)
+
             
             # Tekent de tekst linksboven op het scherm
             screen.blit(text, (20, 20))
@@ -288,6 +300,14 @@ def main():
             
             # Verwijdert de chest van de map
             TILE_MAP[tile_y][tile_x] = "."
+
+            # Highlight spawn zone
+            spawn_screen_x = SPAWN_POS[0] - cam_x
+            spawn_screen_y = SPAWN_POS[1] - cam_y
+            spawn_surf = pygame.Surface((TILE_SIZE * 2, TILE_SIZE * 2), pygame.SRCALPHA)
+            pygame.draw.rect(spawn_surf, (0, 255, 100, 60), (0, 0, TILE_SIZE * 2, TILE_SIZE * 2), border_radius=8)
+            pygame.draw.rect(spawn_surf, (0, 255, 100, 120), (0, 0, TILE_SIZE * 2, TILE_SIZE * 2), 3, border_radius=8)
+            screen.blit(spawn_surf, (spawn_screen_x - TILE_SIZE, spawn_screen_y - TILE_SIZE))
 
             # Hud tekenen
         hud_font = pygame.font.SysFont(None, 36)

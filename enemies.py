@@ -13,6 +13,8 @@ class Enemy:
 
     # Wordt aangeroepen bij het maken van een enemy object
     def __init__(self, x, y, patrol):
+
+        self.patrol_wait = 0 
         
         # Startpositie van de enemy
         self.x = x
@@ -65,17 +67,13 @@ class Enemy:
         distance = math.hypot(dx, dy)
 
         # Als de enemy nog niet bij het doel is
-        if distance > 5:
-            
-            # Bereken kijkrichting naar target
+        if self.patrol_wait > 0:
+            self.patrol_wait -= dt
+        elif distance > 20:
             self.angle = math.atan2(dy, dx)
-            
-            # Normaleerde beweging richting target
             move_x = (dx / distance) * self.speed
             move_y = (dy / distance) * self.speed
-            
-           
-            # With this (adds stuck detection):
+
             new_x = self.x + move_x
             new_y = self.y + move_y
 
@@ -87,9 +85,12 @@ class Enemy:
                 self.y = new_y
                 moved = True
 
-            # If completely stuck, skip to next patrol point
             if not moved:
                 self.patrol_index = (self.patrol_index + 1) % len(self.patrol)
+        else:
+            # Reached patrol point, wait a moment then move to next
+            self.patrol_index = (self.patrol_index + 1) % len(self.patrol)
+            self.patrol_wait = 1.0
 
         # Detectie van de speler (FOV)
 
