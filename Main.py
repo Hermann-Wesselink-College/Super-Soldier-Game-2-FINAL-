@@ -48,7 +48,7 @@ def main():
     tree_img = pygame.transform.scale(tree_img, (TILE_SIZE, TILE_SIZE))
     tent_img = pygame.transform.scale(tent_img, (TILE_SIZE, TILE_SIZE))
     # Zet de titel van het spel bovenaan het venster
-    pygame.display.set_caption("Evil Israeli camp")
+    pygame.display.set_caption("Evil military camp")
     
     # Clock object om FPS te regelen
     clock = pygame.time.Clock()
